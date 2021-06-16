@@ -57,7 +57,28 @@ def openmenuWindow():
 
 def openresearchWindow():
 
-    pass    
+    global research_bg, exit_btn, research_window
+
+    research_window = Toplevel(ins_window)
+  
+    research_window.title("Gymmify")
+    research_window.attributes("-fullscreen", True)
+    
+    # sets the geometry of toplevel
+    research_window.geometry(f'{root.winfo_screenwidth()}x{root.winfo_screenheight()}')
+    
+    research_window["bg"]="#000000"
+    research_bg = PhotoImage(file="resources/research_bg.png")
+    bg_research = Label(research_window,image=research_bg)
+    bg_research.place(x=0,y=0,relwidth=1,relheight=1)
+
+    exit_btn = PhotoImage(file="resources/exit.png")
+    btn_exit = Button(research_window, image = exit_btn, command = openthankWindow)
+    btn_exit["bg"]="black"
+    btn_exit["border"] = "0"
+    btn_exit.place(x=630,y=570)
+
+    research_window.bind('<Key-Escape>',quit)
 
 def opencameraWindow():
 
@@ -127,11 +148,12 @@ def opencameraWindow():
 
     camera_window.bind('<Key-Escape>',quit)
 
+
 def openthankWindow():
 
     global thank_bg
 
-    thank_window = Toplevel(camera_window)
+    thank_window = Toplevel()
   
     thank_window.title("Gymmify")
     thank_window.attributes("-fullscreen", True)
@@ -144,6 +166,8 @@ def openthankWindow():
     bg_thank = Label(thank_window,image=thank_bg)
     bg_thank.place(x=0,y=0,relwidth=1,relheight=1)
 
+    thank_window.bind('<Key-Escape>',quit)
+
 bg = PhotoImage(file = "resources/main_screen.png")
 
 bg_img = Label(root,image=bg)
@@ -154,8 +178,6 @@ btn_start = Button(root, text = "clickme", image = start_btn,command = openinsWi
 btn_start["bg"]="#202020"
 btn_start["border"] = "0"
 btn_start.place(x=670,y=470)
-
-
 
 
 root.bind('<Key-Escape>',quit)
