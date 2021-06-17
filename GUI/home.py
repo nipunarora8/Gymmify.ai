@@ -1,6 +1,12 @@
 from tkinter import *
 from PIL import ImageTk, Image
 import cv2
+import mediapipe as mp
+import numpy as np
+mp_drawing = mp.solutions.drawing_utils
+mp_pose = mp.solutions.pose
+from mediapipe.python.solutions.pose import PoseLandmark
+from exercises.db_press import dumbell_press
 
 root = Tk()
 root.attributes("-fullscreen", True)
@@ -86,21 +92,34 @@ def opencameraWindow():
 
     def start_camera():
         
-        lmain = Label(vidcanvas)
-        lmain.grid(row=0, column=0)
+        lvid = Label(vidcanvas)
+        lvid.grid(row=0, column=0)
+
+        lstick = Label(imgcanvas)
+        lstick.grid(row=0, column=0)
 
         cap = cv2.VideoCapture(0)
         # imgcanvas.create_image(0,0, anchor=NW, image=img)
         def show_frame():
-            _, frame = cap.read()
-            frame = cv2.flip(frame, 1)
-            cv2image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA)
-            cv2image = cv2.resize(cv2image,(700,550))
-            img = Image.fromarray(cv2image)
-            imgtk = ImageTk.PhotoImage(image=img)
-            lmain.imgtk = imgtk
-            lmain.configure(image=imgtk)
-            lmain.after(10, show_frame) 
+            with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
+                
+                _, frame = cap.read()
+                frame = cv2.flip(frame, 1)
+                cv2image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                cv2image.flags.writeable = False
+                cv2image = cv2.resize(cv2image,(700,550))
+                cv2image, blank_image = dumbell_press(cv2image,pose)
+
+                img = Image.fromarray(cv2image)
+                imgtk = ImageTk.PhotoImage(image=img)
+                lvid.imgtk = imgtk
+                lvid.configure(image=imgtk)
+
+                img_stick = Image.fromarray(blank_image)
+                imgst = ImageTk.PhotoImage(image=img_stick)
+                lstick.imgtk = imgst
+                lstick.configure(image=imgst)
+                lstick.after(20, show_frame)
 
         show_frame()
     
