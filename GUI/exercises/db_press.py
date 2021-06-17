@@ -120,11 +120,11 @@ def dumbell_press(image,pose):
             # Render detections
     mp_drawing.draw_landmarks(blank_image, results.pose_landmarks, POSE_CONNECTIONS,
                                     mp_drawing.DrawingSpec(color=(41,255,249), thickness=1, circle_radius=2), 
-                                    mp_drawing.DrawingSpec(color=(255,255,255), thickness=2, circle_radius=3) 
+                                    mp_drawing.DrawingSpec(color=(255,255,255), thickness=3, circle_radius=3) 
                                     )
     mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS,
                                     mp_drawing.DrawingSpec(color=(41,255,249), thickness=1, circle_radius=2), 
-                                    mp_drawing.DrawingSpec(color=(255,255,255), thickness=2, circle_radius=3) 
+                                    mp_drawing.DrawingSpec(color=(255,255,255), thickness=3, circle_radius=3) 
                                     )            
             
     return image, blank_image

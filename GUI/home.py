@@ -2,6 +2,7 @@ from tkinter import *
 from PIL import ImageTk, Image
 import cv2
 import mediapipe as mp
+import imageio
 import numpy as np
 mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
@@ -16,7 +17,7 @@ root["bg"] = "black"
 
 def openinsWindow():
     
-    global ins_bg, menu_btn, about_btn, research_btn, ins_window
+    global ins_bg, menu_btn, about_btn, research_btn, ins_window, exit_btn
     # Toplevel object which will 
     # be treated as a new window
     ins_window = Toplevel(root)
@@ -34,7 +35,7 @@ def openinsWindow():
 
     #buttons
     about_btn = PhotoImage(file="resources/about.png")
-    btn_about = Button(ins_window, text = "clickme", image = about_btn,command = opencameraWindow)
+    btn_about = Button(ins_window, text = "clickme", image = about_btn,command = openaboutWindow)
     btn_about["bg"]="#1C2060"
     btn_about["border"] = "0"
     btn_about.place(x=1100,y=140)
@@ -51,19 +52,311 @@ def openinsWindow():
     btn_research["border"] = "0"
     btn_research.place(x=1100,y=340)
 
+    exit_btn = PhotoImage(file="resources/exit_ins.png")
+    btn_research = Button(ins_window, image = exit_btn, command = openthankWindow)
+    btn_research["bg"]="#120B2C"
+    btn_research["border"] = "0"
+    btn_research.place(x=1470,y=830)
+
     ins_window.bind('<Key-Escape>',quit)
 
 def openaboutWindow():
 
-    pass
+    global about_bg, menu_abt, exit_abt
+
+    about_window = Toplevel()
+  
+    about_window.title("Gymmify")
+    about_window.attributes("-fullscreen", True)
+    
+    # sets the geometry of toplevel
+    about_window.geometry(f'{root.winfo_screenwidth()}x{root.winfo_screenheight()}')
+    
+    about_window["bg"]="#000000"
+    about_bg = PhotoImage(file="resources/about_us.png")
+    bg_about = Label(about_window,image=about_bg)
+    bg_about.place(x=0,y=0,relwidth=1,relheight=1)
+
+    menu_abt = PhotoImage(file="resources/menu_abt.png")
+    btn_menu = Button(about_window, image = menu_abt,command = openmenuWindow)
+    btn_menu["bg"]="#0A0908"
+    btn_menu["border"] = "0"
+    btn_menu.place(x=985,y=685)
+
+    exit_abt = PhotoImage(file="resources/exit_abt.png")
+    btn_exit = Button(about_window, image = exit_abt, command = openthankWindow)
+    btn_exit["bg"]="#0A0908"
+    btn_exit["border"] = "0"
+    btn_exit.place(x=1140,y=685)
+
+    about_window.bind('<Key-Escape>',quit)
 
 def openmenuWindow():
 
-    pass
+    global menu_bg, exit_btn, back_btn, btn_1, btn_2, btn_3, btn_4, btn_5, btn_6, video_name, vidd, lb11, lb12, lb13, lb14, lb15, lb16
+
+    menu_window = Toplevel(root)
+  
+    menu_window.title("Gymmify")
+    menu_window.attributes("-fullscreen", True)
+    
+    # sets the geometry of toplevel
+    menu_window.geometry(f'{root.winfo_screenwidth()}x{root.winfo_screenheight()}')
+    
+    menu_window["bg"]="#150F3A"
+    menu_bg = PhotoImage(file="resources/menu_bg.png")
+    bg_menu = Label(menu_window,image=menu_bg)
+    bg_menu.place(x=0,y=0,relwidth=1,relheight=1)
+
+    back_btn = PhotoImage(file="resources/menu_back.png")
+    btn_back = Button(menu_window, image = back_btn, command = openinsWindow)
+    btn_back["bg"]="#000000"
+    btn_back["border"] = "0"
+    btn_back.place(x=1410,y=830)
+
+    exit_btn = PhotoImage(file="resources/menu_exit.png")
+    btn_exit = Button(menu_window, image = exit_btn, command = openthankWindow)
+    btn_exit["bg"]="#000000"
+    btn_exit["border"] = "0"
+    btn_exit.place(x=1470,y=830)
+
+    btn_1 = PhotoImage(file="resources/shoulder_press_img.png")
+    btn1 = Button(menu_window, text = "clickme", image = btn_1,command = opencameraWindow)
+    btn1["bg"]="#1C2060"
+    btn1["border"] = "0"
+    btn1.place(x=70,y=190)
+
+    lb11 = PhotoImage(file="resources/should_press.png")
+    lb1 = Label(menu_window,image=lb11)
+    lb1["bg"]="black"
+    lb1["border"] = "0"
+    lb1.place(x=180,y=440)
+
+    def change_1(e):
+        global video
+        video_name = "resources/shoulder_press.mp4" #Image-path
+        video = imageio.get_reader(video_name)
+        def stream():
+            try:
+                image = video.get_next_data()
+                image = cv2.resize(image, (435,241))
+                frame_image = Image.fromarray(image)
+                frame_image=ImageTk.PhotoImage(frame_image)
+                btn1.config(image=frame_image)
+                btn1.image = frame_image
+                btn1.after(60, lambda: stream())
+            except:
+                video.close()
+                change_back_1(e)
+                return
+        stream()
+
+    def change_back_1(e):
+        video.close()
+        btn1.config(image=btn_1)
+        btn1.image = btn_1
+
+    btn1.bind("<Enter>",change_1)
+    btn1.bind("<Leave>",change_back_1)
+
+
+    btn_2 = PhotoImage(file="resources/shoulder_press_img.png")
+    btn2 = Button(menu_window, text = "clickme", image = btn_2,command = opencameraWindow)
+    btn2["bg"]="#1C2060"
+    btn2["border"] = "0"
+    btn2.place(x=550,y=190)
+
+    lb12 = PhotoImage(file="resources/should_press.png")
+    lb2 = Label(menu_window,image=lb12)
+    lb2["bg"]="black"
+    lb2["border"] = "0"
+    lb2.place(x=180,y=440)
+
+    def change_2(e):
+        global video
+        video_name = "resources/shoulder_press.mp4" #Image-path
+        video = imageio.get_reader(video_name)
+        def stream():
+            try:
+                image = video.get_next_data()
+                image = cv2.resize(image, (435,241))
+                frame_image = Image.fromarray(image)
+                frame_image=ImageTk.PhotoImage(frame_image)
+                btn2.config(image=frame_image)
+                btn2.image = frame_image
+                btn2.after(60, lambda: stream())
+            except:
+                video.close()
+                return
+        stream()
+
+    def change_back_2(e):
+        video.close()
+        btn2.config(image=btn_2)
+        btn2.image = btn_2
+
+    btn2.bind("<Enter>",change_2)
+    btn2.bind("<Leave>",change_back_2)
+
+    btn_3 = PhotoImage(file="resources/shoulder_press_img.png")
+    btn3 = Button(menu_window, text = "clickme", image = btn_3,command = opencameraWindow)
+    btn3["bg"]="#1C2060"
+    btn3["border"] = "0"
+    btn3.place(x=1030,y=190)
+
+    lb13 = PhotoImage(file="resources/should_press.png")
+    lb3 = Label(menu_window,image=lb13)
+    lb3["bg"]="black"
+    lb3["border"] = "0"
+    lb3.place(x=180,y=440)
+
+    def change_3(e):
+        global video
+        video_name = "resources/shoulder_press.mp4" #Image-path
+        video = imageio.get_reader(video_name)
+        def stream():
+            try:
+                image = video.get_next_data()
+                image = cv2.resize(image, (435,241))
+                frame_image = Image.fromarray(image)
+                frame_image=ImageTk.PhotoImage(frame_image)
+                btn3.config(image=frame_image)
+                btn3.image = frame_image
+                btn3.after(60, lambda: stream())
+            except:
+                video.close()
+                return
+        stream()
+
+    def change_back_3(e):
+        video.close()
+        btn3.config(image=btn_3)
+        btn3.image = btn_3
+
+    btn3.bind("<Enter>",change_3)
+    btn3.bind("<Leave>",change_back_3)
+
+    btn_4 = PhotoImage(file="resources/shoulder_press_img.png")
+    btn4 = Button(menu_window, text = "clickme", image = btn_4,command = opencameraWindow)
+    btn4["bg"]="#1C2060"
+    btn4["border"] = "0"
+    btn4.place(x=70,y=500)
+
+    lb14 = PhotoImage(file="resources/should_press.png")
+    lb4 = Label(menu_window,image=lb14)
+    lb4["bg"]="black"
+    lb4["border"] = "0"
+    lb4.place(x=180,y=440)
+
+    def change_4(e):
+        global video
+        video_name = "resources/shoulder_press.mp4" #Image-path
+        video = imageio.get_reader(video_name)
+        def stream():
+            try:
+                image = video.get_next_data()
+                image = cv2.resize(image, (435,241))
+                frame_image = Image.fromarray(image)
+                frame_image=ImageTk.PhotoImage(frame_image)
+                btn4.config(image=frame_image)
+                btn4.image = frame_image
+                btn4.after(60, lambda: stream())
+            except:
+                video.close()
+                return
+        stream()
+
+    def change_back_4(e):
+        video.close()
+        btn4.config(image=btn_4)
+        btn4.image = btn_4
+
+    btn4.bind("<Enter>",change_4)
+    btn4.bind("<Leave>",change_back_4)
+
+    btn_5 = PhotoImage(file="resources/shoulder_press_img.png")
+    btn5 = Button(menu_window, text = "clickme", image = btn_5,command = opencameraWindow)
+    btn5["bg"]="#1C2060"
+    btn5["border"] = "0"
+    btn5.place(x=550,y=500)
+
+    lb15 = PhotoImage(file="resources/should_press.png")
+    lb5 = Label(menu_window,image=lb15)
+    lb5["bg"]="black"
+    lb5["border"] = "0"
+    lb5.place(x=180,y=440)
+
+    def change_5(e):
+        global video
+        video_name = "resources/shoulder_press.mp4" #Image-path
+        video = imageio.get_reader(video_name)
+        def stream():
+            try:
+                image = video.get_next_data()
+                image = cv2.resize(image, (435,241))
+                frame_image = Image.fromarray(image)
+                frame_image=ImageTk.PhotoImage(frame_image)
+                btn5.config(image=frame_image)
+                btn5.image = frame_image
+                btn5.after(60, lambda: stream())
+            except:
+                video.close()
+                return
+        stream()
+
+    def change_back_5(e):
+        video.close()
+        btn5.config(image=btn_5)
+        btn5.image = btn_5
+
+    btn5.bind("<Enter>",change_5)
+    btn5.bind("<Leave>",change_back_5)
+
+    btn_6 = PhotoImage(file="resources/shoulder_press_img.png")
+    btn6 = Button(menu_window, text = "clickme", image = btn_6,command = opencameraWindow)
+    btn6["bg"]="#1C2060"
+    btn6["border"] = "0"
+    btn6.place(x=1030,y=500)
+
+    lb16 = PhotoImage(file="resources/should_press.png")
+    lb6 = Label(menu_window,image=lb16)
+    lb6["bg"]="black"
+    lb6["border"] = "0"
+    lb6.place(x=180,y=440)
+
+    def change_6(e):
+        global video
+        video_name = "resources/shoulder_press.mp4" #Image-path
+        video = imageio.get_reader(video_name)
+        def stream():
+            try:
+                image = video.get_next_data()
+                image = cv2.resize(image, (435,241))
+                frame_image = Image.fromarray(image)
+                frame_image=ImageTk.PhotoImage(frame_image)
+                btn6.config(image=frame_image)
+                btn6.image = frame_image
+                btn6.after(60, lambda: stream())
+            except:
+                video.close()
+                return
+        stream()
+
+    def change_back_6(e):
+        video.close()
+        btn6.config(image=btn_6)
+        btn6.image = btn_6
+
+    btn6.bind("<Enter>",change_6)
+    btn6.bind("<Leave>",change_back_6)
+
+
+
+    menu_window.bind('<Key-Escape>',quit)
 
 def openresearchWindow():
 
-    global research_bg, exit_btn, research_window
+    global research_bg, exit_btn, research_window, back_btn
 
     research_window = Toplevel(ins_window)
   
@@ -73,22 +366,31 @@ def openresearchWindow():
     # sets the geometry of toplevel
     research_window.geometry(f'{root.winfo_screenwidth()}x{root.winfo_screenheight()}')
     
+    
     research_window["bg"]="#000000"
     research_bg = PhotoImage(file="resources/research_bg.png")
     bg_research = Label(research_window,image=research_bg)
     bg_research.place(x=0,y=0,relwidth=1,relheight=1)
 
+
+    back_btn = PhotoImage(file="resources/research_back.png")
+    btn_exit = Button(research_window, image = back_btn, command = openinsWindow)
+    btn_exit["bg"]="#0D0D0D"
+    btn_exit["border"] = "0"
+    btn_exit.place(x=469,y=570)
+
     exit_btn = PhotoImage(file="resources/exit.png")
     btn_exit = Button(research_window, image = exit_btn, command = openthankWindow)
-    btn_exit["bg"]="black"
+    btn_exit["bg"]="#0D0D0D"
     btn_exit["border"] = "0"
-    btn_exit.place(x=630,y=570)
+    btn_exit.place(x=800,y=570)
 
     research_window.bind('<Key-Escape>',quit)
 
 def opencameraWindow():
 
     global cam_bg, startt_btn, stop_btn, camera_window, imgcanvas, begin
+    stop = True
 
     def start_camera():
         
@@ -97,31 +399,33 @@ def opencameraWindow():
 
         lstick = Label(imgcanvas)
         lstick.grid(row=0, column=0)
-
+        global cap
         cap = cv2.VideoCapture(0)
         # imgcanvas.create_image(0,0, anchor=NW, image=img)
         def show_frame():
             with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
-                
-                _, frame = cap.read()
-                frame = cv2.flip(frame, 1)
-                cv2image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                cv2image.flags.writeable = False
-                cv2image = cv2.resize(cv2image,(700,550))
-                cv2image, blank_image = dumbell_press(cv2image,pose)
+                try: 
+                    _, frame = cap.read()
+                    frame = cv2.flip(frame, 1)
+                    cv2image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                    cv2image.flags.writeable = False
+                    cv2image = cv2.resize(cv2image,(700,550))
+                    cv2image, blank_image = dumbell_press(cv2image,pose)
 
-                img = Image.fromarray(cv2image)
-                imgtk = ImageTk.PhotoImage(image=img)
-                lvid.imgtk = imgtk
-                lvid.configure(image=imgtk)
+                    img = Image.fromarray(cv2image)
+                    imgtk = ImageTk.PhotoImage(image=img)
+                    lvid.imgtk = imgtk
+                    lvid.configure(image=imgtk)
 
-                img_stick = Image.fromarray(blank_image)
-                imgst = ImageTk.PhotoImage(image=img_stick)
-                lstick.imgtk = imgst
-                lstick.configure(image=imgst)
-                lstick.after(20, show_frame)
-
-        show_frame()
+                    img_stick = Image.fromarray(blank_image)
+                    imgst = ImageTk.PhotoImage(image=img_stick)
+                    lstick.imgtk = imgst
+                    lstick.configure(image=imgst)
+                    lstick.after(20, show_frame)
+                except:
+                    pass
+        if stop:
+            show_frame()
     
     # Toplevel object which will 
     # be treated as a new window
@@ -167,9 +471,15 @@ def opencameraWindow():
 
     camera_window.bind('<Key-Escape>',quit)
 
-
 def openthankWindow():
+    global stop, thank_bg, cap, exit_btn, back_btn
+    stop = False
 
+    try:
+        cap.release()
+    except NameError:
+        pass
+    
     global thank_bg
 
     thank_window = Toplevel()
@@ -185,6 +495,18 @@ def openthankWindow():
     bg_thank = Label(thank_window,image=thank_bg)
     bg_thank.place(x=0,y=0,relwidth=1,relheight=1)
 
+    back_btn = PhotoImage(file="resources/menu_back.png")
+    btn_back = Button(thank_window, image = back_btn, command = openinsWindow)
+    btn_back["bg"]="#000000"
+    btn_back["border"] = "0"
+    btn_back.place(x=1410,y=830)
+
+    exit_btn = PhotoImage(file="resources/menu_exit.png")
+    btn_exit = Button(thank_window, image = exit_btn, command = quit)
+    btn_exit["bg"]="#000000"
+    btn_exit["border"] = "0"
+    btn_exit.place(x=1470,y=830)
+
     thank_window.bind('<Key-Escape>',quit)
 
 bg = PhotoImage(file = "resources/main_screen.png")
@@ -197,7 +519,6 @@ btn_start = Button(root, text = "clickme", image = start_btn,command = openinsWi
 btn_start["bg"]="#202020"
 btn_start["border"] = "0"
 btn_start.place(x=670,y=470)
-
 
 root.bind('<Key-Escape>',quit)
 

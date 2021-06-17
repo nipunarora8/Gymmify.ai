@@ -26,8 +26,6 @@ def show_frame():
     lmain.configure(image=imgtk)
     lmain.after(10, show_frame) 
 
-
-
 #Slider window (slider controls stage position)
 sliderFrame = tk.Frame(window, width=600, height=100)
 sliderFrame.grid(row = 600, column=0, padx=10, pady=2)
