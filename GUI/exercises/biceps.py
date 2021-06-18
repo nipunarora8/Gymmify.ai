@@ -1,6 +1,7 @@
 import cv2
 import mediapipe as mp
 import numpy as np
+from numpy.core.numeric import count_nonzero
 from exercises.angle_calculation import angle_cal
 from mediapipe.python.solutions.pose import PoseLandmark
 
@@ -41,61 +42,84 @@ POSE_CONNECTIONS = frozenset([
 ])
 
 def left(landmarks):
-    
+
+    global stage
+
     # Get coordinates_
     shoulder = [landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].x,landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].y]
     elbow = [landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].x,landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].y]
     wrist = [landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].x,landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].y]
-    hip = [landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].x,landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].y]
+    # hip = [landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].x,landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].y]
 
-    shoulder_angle = angle_cal(hip, shoulder, elbow)
+    # shoulder_angle = angle_cal(hip, shoulder, elbow)
     elbow_angle = angle_cal(shoulder, elbow, wrist)
-    
-    if shoulder_angle >=70:
-        shoulder_color = (20,255,57)
-    else:
-        shoulder_color = (255,0,0)
+
         
-    if elbow_angle >=60:
+    if elbow_angle >=20:
         elbow_color = (20,255,57)
     else:
         elbow_color = (255,0,0)
+
+    if elbow_angle > 160:
+        stage = "down"
+    if elbow_angle < 30 and stage == "down":
+        stage = "up"
         
-    return [[shoulder,shoulder_angle,shoulder_color],[elbow,elbow_angle,elbow_color]]
+    return [[elbow,elbow_angle,elbow_color,stage]]
 #     return shoulder_angle, elbow_angle
 
 def right(landmarks):
-    
+
+    global stage
     # Get coordinates_
     shoulder = [landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].y]
     elbow = [landmarks[mp_pose.PoseLandmark.RIGHT_ELBOW.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_ELBOW.value].y]
     wrist = [landmarks[mp_pose.PoseLandmark.RIGHT_WRIST.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_WRIST.value].y]
-    hip = [landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].y]
+    # hip = [landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].y]
 
-    shoulder_angle = angle_cal(hip, shoulder, elbow)
+    # shoulder_angle = angle_cal(hip, shoulder, elbow)
     elbow_angle = angle_cal(shoulder, elbow, wrist)
-    
-    if shoulder_angle >=70:
-        shoulder_color = (20,255,57)
-    else:
-        shoulder_color = (255,0,0)
         
-    if elbow_angle >=60:
+    if elbow_angle >=20:
         elbow_color = (20,255,57)
     else:
         elbow_color = (255,0,0)
+
+    if elbow_angle > 160:
+        stage = "down"
+    if elbow_angle < 30 and stage == "down":
+        stage = "up"
         
-    return [[shoulder,shoulder_angle,shoulder_color],[elbow,elbow_angle,elbow_color]]
+    return [[elbow,elbow_angle,elbow_color,stage]]
 #     return shoulder_angle, elbow_angle
 
-def visualize(arr,image):
+def visualize(strr,arr,image):
     for i in arr:
         cv2.putText(image, str(i[1]), 
                            tuple(np.multiply(i[0], [700,550]).astype(int)), 
-                           cv2.FONT_HERSHEY_SIMPLEX, 1, i[2], 2, cv2.LINE_AA
+                           cv2.FONT_HERSHEY_SIMPLEX, 1, i[2], 1, cv2.LINE_AA
                                 )
+        cv2.putText(image, "Current",(10,20), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (255,255,0), 1, cv2.LINE_AA)
+        cv2.putText(image, "Next",(600,20), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (255,255,0), 1, cv2.LINE_AA)
+        
+        # current
+        if strr == "left":
+            cv2.putText(image, f'Left:{i[3]}',(10,40), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,255,0), 1, cv2.LINE_AA)
+        elif strr == "right":
+            cv2.putText(image, f'Right:{i[3]}',(10,60), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,255,0), 1, cv2.LINE_AA)
+        
+        #next
+        if i[3]=="up":
+            nextt = "down"
+        elif i[3]=="down":
+            nextt = "up"
+        if strr == "left":
+            cv2.putText(image, f'Left:{nextt}',(600,40), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,0,0), 1, cv2.LINE_AA)
+        elif strr == "right":
+            cv2.putText(image, f'Right:{nextt}',(600,60), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,0,0), 1, cv2.LINE_AA)
+
     
-def dumbell_press(image,pose):
+def bicep_curl(image,pose):
     ## Setup mediapipe instance        
 
     results = pose.process(image)
@@ -108,15 +132,14 @@ def dumbell_press(image,pose):
     # Extract landmarks
     try:
         landmarks = results.pose_landmarks.landmark
-                
-        visualize(left(landmarks),blank_image)
-        visualize(right(landmarks),blank_image)
+        visualize("left",left(landmarks),blank_image)
+        visualize("right",right(landmarks),blank_image)
+
         # visualize(left(landmarks),image)
         # visualize(right(landmarks),image)
                 
     except:
         pass
-            
             # Render detections
     mp_drawing.draw_landmarks(blank_image, results.pose_landmarks, POSE_CONNECTIONS,
                                     mp_drawing.DrawingSpec(color=(41,255,249), thickness=1, circle_radius=2), 
@@ -130,6 +153,7 @@ def dumbell_press(image,pose):
     return image, blank_image
 
 # cap = cv2.VideoCapture(0)
+# stage = None
 # with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
 #     while True:
 #         ret, frame = cap.read()
@@ -138,8 +162,8 @@ def dumbell_press(image,pose):
 #         # Recolor image to RGB
 #         # image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 #         frame.flags.writeable = False
-#         image, blank_image = dumbell_press(frame,pose)
-#         cv2.imshow('Gymmify Feed', image)
+#         image, blank_image = bicep_curl(frame,pose)
+#         cv2.imshow('Gymmify Feed', blank_image)
 #             # cv2.imshow('Gymmify Feed', image)
 
 #         if cv2.waitKey(10) & 0xFF == ord('q'):

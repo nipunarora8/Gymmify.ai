@@ -47,21 +47,28 @@ def left(landmarks):
     elbow = [landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].x,landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].y]
     wrist = [landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].x,landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].y]
     hip = [landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].x,landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].y]
+    knee = [landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].x,landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].y]
 
+    hip_angle = angle_cal(shoulder,hip, knee)
     shoulder_angle = angle_cal(hip, shoulder, elbow)
     elbow_angle = angle_cal(shoulder, elbow, wrist)
     
-    if shoulder_angle >=70:
+    if shoulder_angle >=10 and shoulder_angle <100:
         shoulder_color = (20,255,57)
     else:
         shoulder_color = (255,0,0)
         
-    if elbow_angle >=60:
+    if elbow_angle >=100:
         elbow_color = (20,255,57)
     else:
         elbow_color = (255,0,0)
+
+    if hip_angle >=160:
+        hip_color = (20,255,57)
+    else:
+        hip_color = (255,0,0)
         
-    return [[shoulder,shoulder_angle,shoulder_color],[elbow,elbow_angle,elbow_color]]
+    return [[shoulder,shoulder_angle,shoulder_color],[elbow,elbow_angle,elbow_color],[hip,hip_angle,hip_color]]
 #     return shoulder_angle, elbow_angle
 
 def right(landmarks):
@@ -71,21 +78,28 @@ def right(landmarks):
     elbow = [landmarks[mp_pose.PoseLandmark.RIGHT_ELBOW.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_ELBOW.value].y]
     wrist = [landmarks[mp_pose.PoseLandmark.RIGHT_WRIST.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_WRIST.value].y]
     hip = [landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].y]
-
+    knee = [landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value].y]
+    
+    hip_angle = angle_cal(shoulder,hip, knee)
     shoulder_angle = angle_cal(hip, shoulder, elbow)
     elbow_angle = angle_cal(shoulder, elbow, wrist)
     
-    if shoulder_angle >=70:
+    if shoulder_angle >=10 and shoulder_angle <100:
         shoulder_color = (20,255,57)
     else:
         shoulder_color = (255,0,0)
         
-    if elbow_angle >=60:
+    if elbow_angle >=100:
         elbow_color = (20,255,57)
     else:
         elbow_color = (255,0,0)
         
-    return [[shoulder,shoulder_angle,shoulder_color],[elbow,elbow_angle,elbow_color]]
+    if hip_angle >=160:
+        hip_color = (20,255,57)
+    else:
+        hip_color = (255,0,0)
+        
+    return [[shoulder,shoulder_angle,shoulder_color],[elbow,elbow_angle,elbow_color],[hip,hip_angle,hip_color]]
 #     return shoulder_angle, elbow_angle
 
 def visualize(arr,image):
@@ -95,7 +109,7 @@ def visualize(arr,image):
                            cv2.FONT_HERSHEY_SIMPLEX, 1, i[2], 2, cv2.LINE_AA
                                 )
     
-def dumbell_press(image,pose):
+def pushups(image,pose):
     ## Setup mediapipe instance        
 
     results = pose.process(image)

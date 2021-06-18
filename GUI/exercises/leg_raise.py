@@ -44,48 +44,48 @@ def left(landmarks):
     
     # Get coordinates_
     shoulder = [landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].x,landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].y]
-    elbow = [landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].x,landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].y]
-    wrist = [landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].x,landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].y]
     hip = [landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].x,landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].y]
-
-    shoulder_angle = angle_cal(hip, shoulder, elbow)
-    elbow_angle = angle_cal(shoulder, elbow, wrist)
+    knee = [landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].x,landmarks[mp_pose.PoseLandmark.LEFT_KNEE.value].y]
+    ankle = [landmarks[mp_pose.PoseLandmark.LEFT_ANKLE.value].x,landmarks[mp_pose.PoseLandmark.LEFT_ANKLE.value].y]
+    # wrist = [landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].x,landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].y]
     
-    if shoulder_angle >=70:
-        shoulder_color = (20,255,57)
+    hip_angle = angle_cal(shoulder,hip, knee)
+    knee_angle = angle_cal(hip, knee, ankle)
+    
+    if knee_angle >=160:
+        knee_color = (20,255,57)
     else:
-        shoulder_color = (255,0,0)
+        knee_color = (255,0,0)
         
-    if elbow_angle >=60:
-        elbow_color = (20,255,57)
+    if hip_angle >=100:
+        hip_color = (20,255,57)
     else:
-        elbow_color = (255,0,0)
-        
-    return [[shoulder,shoulder_angle,shoulder_color],[elbow,elbow_angle,elbow_color]]
+        hip_color = (255,0,0)
+    return [[knee,knee_angle,knee_color],[hip,hip_angle,hip_color]]
 #     return shoulder_angle, elbow_angle
 
 def right(landmarks):
     
     # Get coordinates_
     shoulder = [landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_SHOULDER.value].y]
-    elbow = [landmarks[mp_pose.PoseLandmark.RIGHT_ELBOW.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_ELBOW.value].y]
-    wrist = [landmarks[mp_pose.PoseLandmark.RIGHT_WRIST.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_WRIST.value].y]
     hip = [landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_HIP.value].y]
+    knee = [landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_KNEE.value].y]
+    ankle = [landmarks[mp_pose.PoseLandmark.RIGHT_ANKLE.value].x,landmarks[mp_pose.PoseLandmark.RIGHT_ANKLE.value].y]
 
-    shoulder_angle = angle_cal(hip, shoulder, elbow)
-    elbow_angle = angle_cal(shoulder, elbow, wrist)
+    hip_angle = angle_cal(shoulder,hip, knee)
+    knee_angle = angle_cal(hip, knee, ankle)
     
-    if shoulder_angle >=70:
-        shoulder_color = (20,255,57)
+    if knee_angle >=160:
+        knee_color = (20,255,57)
     else:
-        shoulder_color = (255,0,0)
+        knee_color = (255,0,0)
         
-    if elbow_angle >=60:
-        elbow_color = (20,255,57)
+    if hip_angle >=100:
+        hip_color = (20,255,57)
     else:
-        elbow_color = (255,0,0)
+        hip_color = (255,0,0)
         
-    return [[shoulder,shoulder_angle,shoulder_color],[elbow,elbow_angle,elbow_color]]
+    return [[knee,knee_angle,knee_color],[hip,hip_angle,hip_color]]
 #     return shoulder_angle, elbow_angle
 
 def visualize(arr,image):
@@ -95,7 +95,7 @@ def visualize(arr,image):
                            cv2.FONT_HERSHEY_SIMPLEX, 1, i[2], 2, cv2.LINE_AA
                                 )
     
-def dumbell_press(image,pose):
+def leg_raise(image,pose):
     ## Setup mediapipe instance        
 
     results = pose.process(image)
@@ -138,7 +138,7 @@ def dumbell_press(image,pose):
 #         # Recolor image to RGB
 #         # image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 #         frame.flags.writeable = False
-#         image, blank_image = dumbell_press(frame,pose)
+#         image, blank_image = free_squats(frame,pose)
 #         cv2.imshow('Gymmify Feed', image)
 #             # cv2.imshow('Gymmify Feed', image)
 

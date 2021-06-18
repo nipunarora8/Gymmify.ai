@@ -8,6 +8,11 @@ mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
 from mediapipe.python.solutions.pose import PoseLandmark
 from exercises.db_press import dumbell_press
+from exercises.squats import free_squats
+from exercises.lateral_raise import lateral_raise
+from exercises.pushups import pushups
+from exercises.leg_raise import leg_raise
+from exercises.biceps import bicep_curl
 
 root = Tk()
 root.attributes("-fullscreen", True)
@@ -120,8 +125,13 @@ def openmenuWindow():
     btn_exit["border"] = "0"
     btn_exit.place(x=1470,y=830)
 
-    btn_1 = PhotoImage(file="resources/shoulder_press_img.png")
-    btn1 = Button(menu_window, text = "clickme", image = btn_1,command = opencameraWindow)
+    def btn_1f():
+        global n
+        n=1
+        opencameraWindow()
+
+    btn_1 = PhotoImage(file="resources/shoulder_press.png")
+    btn1 = Button(menu_window, image = btn_1,command = btn_1f)
     btn1["bg"]="#1C2060"
     btn1["border"] = "0"
     btn1.place(x=70,y=190)
@@ -133,12 +143,12 @@ def openmenuWindow():
     lb1.place(x=180,y=440)
 
     def change_1(e):
-        global video
+        global video1
         video_name = "resources/shoulder_press.mp4" #Image-path
-        video = imageio.get_reader(video_name)
+        video1 = imageio.get_reader(video_name)
         def stream():
             try:
-                image = video.get_next_data()
+                image = video1.get_next_data()
                 image = cv2.resize(image, (435,241))
                 frame_image = Image.fromarray(image)
                 frame_image=ImageTk.PhotoImage(frame_image)
@@ -146,39 +156,43 @@ def openmenuWindow():
                 btn1.image = frame_image
                 btn1.after(60, lambda: stream())
             except:
-                video.close()
+                video1.close()
                 change_back_1(e)
                 return
         stream()
 
     def change_back_1(e):
-        video.close()
+        video1.close()
         btn1.config(image=btn_1)
         btn1.image = btn_1
 
     btn1.bind("<Enter>",change_1)
     btn1.bind("<Leave>",change_back_1)
 
+    def btn_2f():
+        global n
+        n=2
+        opencameraWindow()
 
-    btn_2 = PhotoImage(file="resources/shoulder_press_img.png")
-    btn2 = Button(menu_window, text = "clickme", image = btn_2,command = opencameraWindow)
+    btn_2 = PhotoImage(file="resources/pushups.png")
+    btn2 = Button(menu_window, image = btn_2,command = btn_2f)
     btn2["bg"]="#1C2060"
     btn2["border"] = "0"
     btn2.place(x=550,y=190)
 
-    lb12 = PhotoImage(file="resources/should_press.png")
+    lb12 = PhotoImage(file="resources/pushup_head.png")
     lb2 = Label(menu_window,image=lb12)
     lb2["bg"]="black"
     lb2["border"] = "0"
-    lb2.place(x=180,y=440)
+    lb2.place(x=650,y=440)
 
     def change_2(e):
-        global video
-        video_name = "resources/shoulder_press.mp4" #Image-path
-        video = imageio.get_reader(video_name)
+        global video2
+        video_name = "resources/pushups.mp4" #Image-path
+        video2 = imageio.get_reader(video_name)
         def stream():
             try:
-                image = video.get_next_data()
+                image = video2.get_next_data()
                 image = cv2.resize(image, (435,241))
                 frame_image = Image.fromarray(image)
                 frame_image=ImageTk.PhotoImage(frame_image)
@@ -186,37 +200,42 @@ def openmenuWindow():
                 btn2.image = frame_image
                 btn2.after(60, lambda: stream())
             except:
-                video.close()
+                video2.close()
                 return
         stream()
 
     def change_back_2(e):
-        video.close()
+        video2.close()
         btn2.config(image=btn_2)
         btn2.image = btn_2
 
     btn2.bind("<Enter>",change_2)
     btn2.bind("<Leave>",change_back_2)
 
-    btn_3 = PhotoImage(file="resources/shoulder_press_img.png")
-    btn3 = Button(menu_window, text = "clickme", image = btn_3,command = opencameraWindow)
+    def btn_3f():
+        global n
+        n=3
+        opencameraWindow()
+
+    btn_3 = PhotoImage(file="resources/lateral_raise.png")
+    btn3 = Button(menu_window, image = btn_3,command = btn_3f)
     btn3["bg"]="#1C2060"
     btn3["border"] = "0"
     btn3.place(x=1030,y=190)
 
-    lb13 = PhotoImage(file="resources/should_press.png")
+    lb13 = PhotoImage(file="resources/lateral_raise_head.png")
     lb3 = Label(menu_window,image=lb13)
     lb3["bg"]="black"
     lb3["border"] = "0"
-    lb3.place(x=180,y=440)
+    lb3.place(x=1125,y=440)
 
     def change_3(e):
-        global video
-        video_name = "resources/shoulder_press.mp4" #Image-path
-        video = imageio.get_reader(video_name)
+        global video3
+        video_name = "resources/lateral_raise.mp4" #Image-path
+        video3 = imageio.get_reader(video_name)
         def stream():
             try:
-                image = video.get_next_data()
+                image = video3.get_next_data()
                 image = cv2.resize(image, (435,241))
                 frame_image = Image.fromarray(image)
                 frame_image=ImageTk.PhotoImage(frame_image)
@@ -224,37 +243,42 @@ def openmenuWindow():
                 btn3.image = frame_image
                 btn3.after(60, lambda: stream())
             except:
-                video.close()
+                video3.close()
                 return
         stream()
 
     def change_back_3(e):
-        video.close()
+        video3.close()
         btn3.config(image=btn_3)
         btn3.image = btn_3
 
     btn3.bind("<Enter>",change_3)
     btn3.bind("<Leave>",change_back_3)
 
-    btn_4 = PhotoImage(file="resources/shoulder_press_img.png")
-    btn4 = Button(menu_window, text = "clickme", image = btn_4,command = opencameraWindow)
+    def btn_4f():
+        global n
+        n=4
+        opencameraWindow()
+
+    btn_4 = PhotoImage(file="resources/squats.png")
+    btn4 = Button(menu_window, image = btn_4,command = btn_4f)
     btn4["bg"]="#1C2060"
     btn4["border"] = "0"
     btn4.place(x=70,y=500)
 
-    lb14 = PhotoImage(file="resources/should_press.png")
+    lb14 = PhotoImage(file="resources/squats_head.png")
     lb4 = Label(menu_window,image=lb14)
     lb4["bg"]="black"
     lb4["border"] = "0"
-    lb4.place(x=180,y=440)
+    lb4.place(x=180,y=750)
 
     def change_4(e):
-        global video
-        video_name = "resources/shoulder_press.mp4" #Image-path
-        video = imageio.get_reader(video_name)
+        global video4
+        video_name = "resources/squats.mp4" #Image-path
+        video4 = imageio.get_reader(video_name)
         def stream():
             try:
-                image = video.get_next_data()
+                image = video4.get_next_data()
                 image = cv2.resize(image, (435,241))
                 frame_image = Image.fromarray(image)
                 frame_image=ImageTk.PhotoImage(frame_image)
@@ -262,37 +286,42 @@ def openmenuWindow():
                 btn4.image = frame_image
                 btn4.after(60, lambda: stream())
             except:
-                video.close()
+                video4.close()
                 return
         stream()
 
     def change_back_4(e):
-        video.close()
+        video4.close()
         btn4.config(image=btn_4)
         btn4.image = btn_4
 
     btn4.bind("<Enter>",change_4)
     btn4.bind("<Leave>",change_back_4)
 
-    btn_5 = PhotoImage(file="resources/shoulder_press_img.png")
-    btn5 = Button(menu_window, text = "clickme", image = btn_5,command = opencameraWindow)
+    def btn_5f():
+        global n
+        n=5
+        opencameraWindow()
+
+    btn_5 = PhotoImage(file="resources/bicep_curl.png")
+    btn5 = Button(menu_window, image = btn_5,command = btn_5f)
     btn5["bg"]="#1C2060"
     btn5["border"] = "0"
     btn5.place(x=550,y=500)
 
-    lb15 = PhotoImage(file="resources/should_press.png")
+    lb15 = PhotoImage(file="resources/bicep_curl_head.png")
     lb5 = Label(menu_window,image=lb15)
     lb5["bg"]="black"
     lb5["border"] = "0"
-    lb5.place(x=180,y=440)
+    lb5.place(x=650,y=750)
 
     def change_5(e):
-        global video
-        video_name = "resources/shoulder_press.mp4" #Image-path
-        video = imageio.get_reader(video_name)
+        global video5
+        video_name = "resources/bicep_curl.mp4" #Image-path
+        video5 = imageio.get_reader(video_name)
         def stream():
             try:
-                image = video.get_next_data()
+                image = video5.get_next_data()
                 image = cv2.resize(image, (435,241))
                 frame_image = Image.fromarray(image)
                 frame_image=ImageTk.PhotoImage(frame_image)
@@ -300,37 +329,42 @@ def openmenuWindow():
                 btn5.image = frame_image
                 btn5.after(60, lambda: stream())
             except:
-                video.close()
+                video5.close()
                 return
         stream()
 
     def change_back_5(e):
-        video.close()
+        video5.close()
         btn5.config(image=btn_5)
         btn5.image = btn_5
 
     btn5.bind("<Enter>",change_5)
     btn5.bind("<Leave>",change_back_5)
 
-    btn_6 = PhotoImage(file="resources/shoulder_press_img.png")
-    btn6 = Button(menu_window, text = "clickme", image = btn_6,command = opencameraWindow)
+    def btn_6f():
+        global n
+        n=6
+        opencameraWindow()
+
+    btn_6 = PhotoImage(file="resources/leg_raise.png")
+    btn6 = Button(menu_window, image = btn_6,command = btn_6f)
     btn6["bg"]="#1C2060"
     btn6["border"] = "0"
     btn6.place(x=1030,y=500)
 
-    lb16 = PhotoImage(file="resources/should_press.png")
+    lb16 = PhotoImage(file="resources/leg_raise_head.png")
     lb6 = Label(menu_window,image=lb16)
     lb6["bg"]="black"
     lb6["border"] = "0"
-    lb6.place(x=180,y=440)
+    lb6.place(x=1125,y=750)
 
     def change_6(e):
-        global video
-        video_name = "resources/shoulder_press.mp4" #Image-path
-        video = imageio.get_reader(video_name)
+        global video6
+        video_name = "resources/leg_raise.mp4" #Image-path
+        video6 = imageio.get_reader(video_name)
         def stream():
             try:
-                image = video.get_next_data()
+                image = video6.get_next_data()
                 image = cv2.resize(image, (435,241))
                 frame_image = Image.fromarray(image)
                 frame_image=ImageTk.PhotoImage(frame_image)
@@ -338,19 +372,17 @@ def openmenuWindow():
                 btn6.image = frame_image
                 btn6.after(60, lambda: stream())
             except:
-                video.close()
+                video6.close()
                 return
         stream()
 
     def change_back_6(e):
-        video.close()
+        video6.close()
         btn6.config(image=btn_6)
         btn6.image = btn_6
 
     btn6.bind("<Enter>",change_6)
     btn6.bind("<Leave>",change_back_6)
-
-
 
     menu_window.bind('<Key-Escape>',quit)
 
@@ -388,7 +420,7 @@ def openresearchWindow():
     research_window.bind('<Key-Escape>',quit)
 
 def opencameraWindow():
-
+    lst = []
     global cam_bg, startt_btn, stop_btn, camera_window, imgcanvas, begin
     stop = True
 
@@ -410,8 +442,20 @@ def opencameraWindow():
                     cv2image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                     cv2image.flags.writeable = False
                     cv2image = cv2.resize(cv2image,(700,550))
-                    cv2image, blank_image = dumbell_press(cv2image,pose)
-
+                    if n==1:
+                        cv2image, blank_image = dumbell_press(cv2image,pose)
+                    elif n==2:
+                        cv2image, blank_image = pushups(cv2image,pose)
+                    elif n==3:
+                        cv2image, blank_image = lateral_raise(cv2image,pose)
+                    elif n==4:
+                        cv2image, blank_image = free_squats(cv2image,pose)
+                    elif n==5:
+                        stage = None
+                        cv2image, blank_image = bicep_curl(cv2image,pose)
+                    elif n==6:
+                        cv2image, blank_image = leg_raise(cv2image,pose)
+                    
                     img = Image.fromarray(cv2image)
                     imgtk = ImageTk.PhotoImage(image=img)
                     lvid.imgtk = imgtk

@@ -51,12 +51,12 @@ def left(landmarks):
     shoulder_angle = angle_cal(hip, shoulder, elbow)
     elbow_angle = angle_cal(shoulder, elbow, wrist)
     
-    if shoulder_angle >=70:
+    if shoulder_angle <=100:
         shoulder_color = (20,255,57)
     else:
         shoulder_color = (255,0,0)
         
-    if elbow_angle >=60:
+    if elbow_angle >=130 and elbow_angle <=170:
         elbow_color = (20,255,57)
     else:
         elbow_color = (255,0,0)
@@ -75,12 +75,12 @@ def right(landmarks):
     shoulder_angle = angle_cal(hip, shoulder, elbow)
     elbow_angle = angle_cal(shoulder, elbow, wrist)
     
-    if shoulder_angle >=70:
+    if shoulder_angle <=100:
         shoulder_color = (20,255,57)
     else:
         shoulder_color = (255,0,0)
         
-    if elbow_angle >=60:
+    if elbow_angle >=130 and elbow_angle <=170:
         elbow_color = (20,255,57)
     else:
         elbow_color = (255,0,0)
@@ -95,7 +95,7 @@ def visualize(arr,image):
                            cv2.FONT_HERSHEY_SIMPLEX, 1, i[2], 2, cv2.LINE_AA
                                 )
     
-def dumbell_press(image,pose):
+def lateral_raise(image,pose):
     ## Setup mediapipe instance        
 
     results = pose.process(image)
