@@ -86,7 +86,6 @@ def right(landmarks):
         elbow_color = (255,0,0)
         
     return [[shoulder,shoulder_angle,shoulder_color],[elbow,elbow_angle,elbow_color]]
-#     return shoulder_angle, elbow_angle
 
 def visualize(arr,image):
     for i in arr:
@@ -95,14 +94,13 @@ def visualize(arr,image):
                            cv2.FONT_HERSHEY_SIMPLEX, 1, i[2], 2, cv2.LINE_AA
                                 )
     
-def dumbell_press(image,pose):
+def dumbbell_press(image,pose):
     ## Setup mediapipe instance        
 
     results = pose.process(image)
         
     # Recolor back to BGR
     image.flags.writeable = True
-    # image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
     
     blank_image = np.ones((550,700,3), np.uint8)
     # Extract landmarks
@@ -111,8 +109,6 @@ def dumbell_press(image,pose):
                 
         visualize(left(landmarks),blank_image)
         visualize(right(landmarks),blank_image)
-        # visualize(left(landmarks),image)
-        # visualize(right(landmarks),image)
                 
     except:
         pass
@@ -129,22 +125,4 @@ def dumbell_press(image,pose):
             
     return image, blank_image
 
-# cap = cv2.VideoCapture(0)
-# with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
-#     while True:
-#         ret, frame = cap.read()
-#         # frame = cv2.resize(frame,(550,700))
-#         frame = cv2.flip(frame, 1)
-#         # Recolor image to RGB
-#         # image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-#         frame.flags.writeable = False
-#         image, blank_image = dumbell_press(frame,pose)
-#         cv2.imshow('Gymmify Feed', image)
-#             # cv2.imshow('Gymmify Feed', image)
-
-#         if cv2.waitKey(10) & 0xFF == ord('q'):
-#             break
-
-#     cap.release()
-#     cv2.destroyAllWindows()
 

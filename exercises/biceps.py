@@ -1,7 +1,6 @@
 import cv2
 import mediapipe as mp
 import numpy as np
-from numpy.core.numeric import count_nonzero
 from exercises.angle_calculation import angle_cal
 from mediapipe.python.solutions.pose import PoseLandmark
 
@@ -49,9 +48,7 @@ def left(landmarks):
     shoulder = [landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].x,landmarks[mp_pose.PoseLandmark.LEFT_SHOULDER.value].y]
     elbow = [landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].x,landmarks[mp_pose.PoseLandmark.LEFT_ELBOW.value].y]
     wrist = [landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].x,landmarks[mp_pose.PoseLandmark.LEFT_WRIST.value].y]
-    # hip = [landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].x,landmarks[mp_pose.PoseLandmark.LEFT_HIP.value].y]
-
-    # shoulder_angle = angle_cal(hip, shoulder, elbow)
+   
     elbow_angle = angle_cal(shoulder, elbow, wrist)
 
         
@@ -66,7 +63,6 @@ def left(landmarks):
         stage = "up"
         
     return [[elbow,elbow_angle,elbow_color,stage]]
-#     return shoulder_angle, elbow_angle
 
 def right(landmarks):
 
@@ -119,14 +115,12 @@ def visualize(strr,arr,image):
             cv2.putText(image, f'Right:{nextt}',(600,60), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,0,0), 1, cv2.LINE_AA)
 
     
-def bicep_curl(image,pose):
-    ## Setup mediapipe instance        
+def bicep_curl(image,pose):       
 
     results = pose.process(image)
         
     # Recolor back to BGR
     image.flags.writeable = True
-    # image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
     
     blank_image = np.ones((550,700,3), np.uint8)
     # Extract landmarks
@@ -134,9 +128,6 @@ def bicep_curl(image,pose):
         landmarks = results.pose_landmarks.landmark
         visualize("left",left(landmarks),blank_image)
         visualize("right",right(landmarks),blank_image)
-
-        # visualize(left(landmarks),image)
-        # visualize(right(landmarks),image)
                 
     except:
         pass
@@ -151,24 +142,4 @@ def bicep_curl(image,pose):
                                     )            
             
     return image, blank_image
-
-# cap = cv2.VideoCapture(0)
-# stage = None
-# with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
-#     while True:
-#         ret, frame = cap.read()
-#         # frame = cv2.resize(frame,(550,700))
-#         frame = cv2.flip(frame, 1)
-#         # Recolor image to RGB
-#         # image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-#         frame.flags.writeable = False
-#         image, blank_image = bicep_curl(frame,pose)
-#         cv2.imshow('Gymmify Feed', blank_image)
-#             # cv2.imshow('Gymmify Feed', image)
-
-#         if cv2.waitKey(10) & 0xFF == ord('q'):
-#             break
-
-#     cap.release()
-#     cv2.destroyAllWindows()
 

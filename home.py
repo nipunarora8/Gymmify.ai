@@ -7,7 +7,7 @@ import numpy as np
 mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
 from mediapipe.python.solutions.pose import PoseLandmark
-from exercises.db_press import dumbell_press
+from exercises.db_press import dumbbell_press
 from exercises.squats import free_squats
 from exercises.lateral_raise import lateral_raise
 from exercises.pushups import pushups
@@ -443,7 +443,7 @@ def opencameraWindow():
                     cv2image.flags.writeable = False
                     cv2image = cv2.resize(cv2image,(700,550))
                     if n==1:
-                        cv2image, blank_image = dumbell_press(cv2image,pose)
+                        cv2image, blank_image = dumbbell_press(cv2image,pose)
                     elif n==2:
                         cv2image, blank_image = pushups(cv2image,pose)
                     elif n==3:
